@@ -1,14 +1,16 @@
+using AutoMapper;
 using TvShowApi.Application.Services;
 using TvShowApi.Infrastructure.Repositories;
 using TvShowApi.Domain.Repositories;
 using TvShowApi.Application.Interfaces;
+using TvShowApi.Application.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<ITvShowRepository, TvShowRepository>();
 builder.Services.AddScoped<ITvShowService, TvShowService>();
-
 builder.Services.AddControllers();
+builder.Services.AddAutoMapper(typeof(TvShowProfile));
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

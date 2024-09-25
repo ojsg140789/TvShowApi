@@ -8,48 +8,47 @@ namespace TvShowApi.Api.Controllers
     [Route("api/[controller]")]
     public class TvShowsController : ControllerBase
     {
-        private readonly ITvShowService _service;
+        private readonly ITvShowService _tvShowService;
 
-        public TvShowsController(ITvShowService service)
+        public TvShowsController(ITvShowService tvShowService)
         {
-            _service = service;
+            _tvShowService = tvShowService;
         }
 
         [HttpGet]
-        public IActionResult GetAll() => Ok(_service.GetAllTvShows());
+        public ActionResult<IEnumerable<TvShowDto>> GetAll()
+        {
+            return Ok(_tvShowService.GetAllTvShows());
+        }
 
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public ActionResult<TvShowDto> GetById(int id)
         {
-            var show = _service.GetTvShowById(id);
-            if (show == null) return NotFound();
-            return Ok(show);
+            var tvShow = _tvShowService.GetTvShowById(id);
+            if (tvShow == null) return NotFound();
+            return Ok(tvShow);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] TvShowDto tvShowDto)
+        public ActionResult Create([FromBody] CreateTvShowDto createTvShowDto)
         {
-            _service.CreateTvShow(tvShowDto);
-            return CreatedAtAction(nameof(Get), new { id = tvShowDto.Name }, tvShowDto);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            _tvShowService.CreateTvShow(createTvShowDto);
+            return CreatedAtAction(nameof(GetById), new { id = createTvShowDto.Name }, createTvShowDto);
         }
 
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] TvShowDto tvShowDto)
         {
-            var show = _service.GetTvShowById(id);
-            if (show == null) return NotFound();
-
-            _service.UpdateTvShow(id, tvShowDto);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            _tvShowService.UpdateTvShow(id, tvShowDto);
             return NoContent();
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            var show = _service.GetTvShowById(id);
-            if (show == null) return NotFound();
-
-            _service.DeleteTvShow(id);
+            _tvShowService.DeleteTvShow(id);
             return NoContent();
         }
     }

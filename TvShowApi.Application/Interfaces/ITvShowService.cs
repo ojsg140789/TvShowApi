@@ -10,9 +10,9 @@ namespace TvShowApi.Application.Interfaces
 {
     public interface ITvShowService
     {
-        IEnumerable<TvShow> GetAllTvShows();
-        TvShow GetTvShowById(int id);
-        void CreateTvShow(TvShowDto tvShowDto);
+        IEnumerable<TvShowDto> GetAllTvShows();
+        TvShowDto GetTvShowById(int id);
+        void CreateTvShow(CreateTvShowDto tvShowDto);
         void UpdateTvShow(int id, TvShowDto tvShowDto);
         void DeleteTvShow(int id);
     }
